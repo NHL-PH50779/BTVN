@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Task 5</title>
+    <style>
+  button {
+    padding: 12px 24px;
+    font-size: 16px;
+    background: linear-gradient(135deg, #4CAF50, #2E7D32);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-bottom: 10px;
+  }
+
+  button:hover {
+    background: linear-gradient(135deg, #66BB6A, #388E3C);
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  }
+
+  button:active {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+</style>
+
+  </head>
+  <body>
+    <h1>Task 5</h1>
+
+    <h2>Bài 1: In ra số chính phương từ a->n</h2>
+    <button onclick="nhapn()">Nhập n</button>
+
+    <h2>Bài 2: In ra số nguyên tố từ 2->n</h2>
+    <button onclick="inp()">Nhập n</button>
+
+    <h2>Bài 3: In ra bảng cửu chương với giá trị n</h2>
+    <button onclick="input()">Nhập bảng cửu chương muốn in ra</button>
+
+    <h2>Bài 4: In ra cây thông</h2>
+    <button onclick="nhapnn()">Nhập số dòng và ký tự của cây thông</button>
+
+    <script src="./bai1.js"></script>
+    <script src="./bai2.js"></script>
+    <script src="./bai3.js"></script>
+    <script src="./bai4.js"></script>
+  </body>
+</html>
