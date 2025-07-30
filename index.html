@@ -1,150 +1,165 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <style>
-        /* Reset default styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+      /* Reset default styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-        /* Style the menu container */
-        .menu {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
-        }
+      /* Style the menu container */
+      .menu {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+      }
 
-        /* Style the table */
-        .menu table {
-            border-collapse: collapse;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(10px);
-            overflow: hidden;
-        }
+      /* Style the table */
+      .menu table {
+        border-collapse: collapse;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(10px);
+        overflow: hidden;
+      }
 
-        /* Style table headers */
-        .menu th {
-            padding: 15px 30px;
-            font-family: 'Arial', sans-serif;
-            font-size: 1.2em;
-            font-weight: bold;
-            color: #fff;
-            background: linear-gradient(45deg, #ff9f43, #ee5253);
-            text-align: center;
-        }
+      /* Style table headers */
+      .menu th {
+        padding: 15px 30px;
+        font-family: "Arial", sans-serif;
+        font-size: 1.2em;
+        font-weight: bold;
+        color: #fff;
+        background: linear-gradient(45deg, #ff9f43, #ee5253);
+        text-align: center;
+      }
 
-        /* Style table rows */
-        .menu tr {
-            transition: all 0.3s ease;
-        }
+      /* Style table rows */
+      .menu tr {
+        transition: all 0.3s ease;
+      }
 
-        /* Style table cells */
-        .menu td {
-            padding: 15px 30px;
-            font-family: 'Arial', sans-serif;
-            font-size: 1.1em;
-            color: #fff;
-            background: linear-gradient(45deg, #ff9f43, #ee5253);
-            text-align: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .menu td a {
-            text-decoration: none;
-            padding: 15px 30px;
-            font-family: 'Arial', sans-serif;
-            font-size: 1.1em;
-            color: #fff;
-            text-align: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-        }
+      /* Style table cells */
+      .menu td {
+        padding: 15px 30px;
+        font-family: "Arial", sans-serif;
+        font-size: 1.1em;
+        color: #fff;
+        background: linear-gradient(45deg, #ff9f43, #ee5253);
+        text-align: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      }
+      .menu td a {
+        text-decoration: none;
+        padding: 15px 30px;
+        font-family: "Arial", sans-serif;
+        font-size: 1.1em;
+        color: #fff;
+        text-align: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      }
 
-        /* Hover effect for rows */
-        .menu tr:hover td {
-            transform: translateY(-5px);
-            background: linear-gradient(45deg, #ff6b6b, #ffcc29);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-        }
+      /* Hover effect for rows */
+      .menu tr:hover td {
+        transform: translateY(-5px);
+        background: linear-gradient(45deg, #ff6b6b, #ffcc29);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+      }
 
-        /* Empty cells */
-        .menu td:empty {
-            background: rgba(255, 255, 255, 0.2);
-            opacity: 0.5;
-        }
+      /* Empty cells */
+      .menu td:empty {
+        background: rgba(255, 255, 255, 0.2);
+        opacity: 0.5;
+      }
 
-        /* Animation for rows */
-        .menu tr {
-            animation: slideIn 0.5s ease forwards;
-            opacity: 0;
-        }
+      /* Animation for rows */
+      .menu tr {
+        animation: slideIn 0.5s ease forwards;
+        opacity: 0;
+      }
 
-        /* Staggered animation for rows */
-        .menu tr:nth-child(1) { animation-delay: 0.1s; }
-        .menu tr:nth-child(2) { animation-delay: 0.2s; }
-        .menu tr:nth-child(3) { animation-delay: 0.3s; }
-        .menu tr:nth-child(4) { animation-delay: 0.4s; }
-        .menu tr:nth-child(5) { animation-delay: 0.5s; }
+      /* Staggered animation for rows */
+      .menu tr:nth-child(1) {
+        animation-delay: 0.1s;
+      }
+      .menu tr:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      .menu tr:nth-child(3) {
+        animation-delay: 0.3s;
+      }
+      .menu tr:nth-child(4) {
+        animation-delay: 0.4s;
+      }
+      .menu tr:nth-child(5) {
+        animation-delay: 0.5s;
+      }
 
-        /* Slide-in animation */
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
+      /* Slide-in animation */
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateX(-20px);
         }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="menu">
-        <table>
-            <thead>
-                <tr>
-                    <th>STT</th>
-                    <th>Task</th>
-                    <th>Note</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><a href="">1</a></td>
-                    <td><a href="task4">Task 4</a></td>
-                   
-                    <td>No</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                     <td><a href="./task5/index.html">Task 5</a></td>
-                    <td>No</td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td><a href="./task6/index.html">Task 6</a></td>
-                    <td>No</td>
-                </tr>
-                 <tr>
-                    <td>4</td>
-                    <td><a href="./task7/index.html">Task 7</a></td>
-                    <td>No</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-            </tbody>
-        </table>
+      <table>
+        <thead>
+          <tr>
+            <th>STT</th>
+            <th>Task</th>
+            <th>Note</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><a href="">1</a></td>
+            <td><a href="task4">Task 4</a></td>
+
+            <td>No</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td><a href="./task5/index.html">Task 5</a></td>
+            <td>No</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td><a href="./task6/index.html">Task 6</a></td>
+            <td>No</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td><a href="./task7/index.html">Task 7</a></td>
+            <td>No</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td><a href="./task8/index.html">Task 8</a></td>
+            <td>No</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-</body>
+  </body>
 </html>
