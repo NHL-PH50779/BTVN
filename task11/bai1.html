@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chuyển Đổi Dark Mode</title>
+    <style>
+      body {
+        transition: background-color 0.3s, color 0.3s; /* Hiệu ứng chuyển đổi mượt */
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: Arial, sans-serif;
+      }
+      .light-mode {
+        background-color: white;
+        color: black;
+      }
+      .dark-mode {
+        background-color: #333;
+        color: white;
+      }
+      button {
+        padding: 10px 20px;
+        font-size: 1em;
+        cursor: pointer;
+        border: none;
+        border-radius: 5px;
+        background-color: #008cba;
+        color: white;
+      }
+      button:hover {
+        background-color: #007b9a;
+      }
+    </style>
+  </head>
+  <body class="light-mode">
+    <button onclick="toggleMode()">Chuyển chế độ</button>
+    <script src="bai1.js"></script>
+  </body>
+</html>
