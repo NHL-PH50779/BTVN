@@ -1,0 +1,9 @@
+.App {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;              /* Chiều cao full màn hình */
+  width: 100vw;               /* Chiều rộng full màn hình */
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #74ebd5 0%, #9face6 100%);
+}

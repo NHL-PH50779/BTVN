@@ -1,7 +1,7 @@
 import React from "react";
 import students from "./Students";
-import OutStandingStudent from "./OutStandingStudent";
-import StudentList from "./StudentList";
+import OutStandingStudent from "./pages/OutStandingStudent";
+import StudentList from "./pages/StudentList";
 import "./App.css";
 
 function App() {
