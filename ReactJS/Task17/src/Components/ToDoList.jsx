@@ -4,6 +4,7 @@ const API_URL = "https://api-class-o1lo.onrender.com/api/v1/todos";
 
 export default function TodoList() {
   const [todos, setTodos] = useState([]);
+  const [filteredTodos, setFilteredTodos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [q, setQ] = useState("");
   const [priority, setPriority] = useState("");
@@ -15,22 +16,10 @@ export default function TodoList() {
   const fetchTodos = async () => {
     setLoading(true);
     try {
-      const params = new URLSearchParams({
-        _page: page,
-        _limit: limit,
-        _sort: "priority",
-        _order: sortOrder,
-      });
-
-      if (q) params.append("q", q);
-      if (priority) params.append("priority", priority);
-
-      const res = await fetch(`${API_URL}?${params.toString()}`);
+      const res = await fetch(API_URL);
       const data = await res.json();
-
-      if (Array.isArray(data)) setTodos(data);
-      else setTodos(data.data || []);
-      setTotalPages(data.meta?.totalPages || 1);
+      const list = Array.isArray(data.data) ? data.data : [];
+      setTodos(list);
     } catch (err) {
       console.log("Lỗi khi lấy dữ liệu:", err);
     }
@@ -39,11 +28,38 @@ export default function TodoList() {
 
   useEffect(() => {
     fetchTodos();
-  }, [page, q, priority, sortOrder]);
-    const getPriorityLabel = (value) => {
-    if (value === "high" || value === 1) return "Cao";
-    if (value === "medium" || value === 2) return "Trung bình";
-    if (value === "low" || value === 3) return "Thấp";
+  }, []);
+
+  useEffect(() => {
+    let temp = [...todos];
+
+    if (q) {
+      temp = temp.filter((todo) =>
+        todo.name.toLowerCase().includes(q.toLowerCase())
+      );
+    }
+
+    if (priority) {
+      temp = temp.filter(
+        (todo) => String(todo.priority) === String(priority)
+      );
+    }
+
+    temp.sort((a, b) =>
+      sortOrder === "asc" ? a.priority - b.priority : b.priority - a.priority
+    );
+
+    // Phân trang
+    const start = (page - 1) * limit;
+    const end = start + limit;
+    setFilteredTodos(temp.slice(start, end));
+    setTotalPages(Math.ceil(temp.length / limit));
+  }, [todos, q, priority, sortOrder, page]);
+
+  const getPriorityLabel = (value) => {
+    if (value === 1) return "Cao";
+    if (value === 2) return "Trung bình";
+    if (value === 3) return "Thấp";
     return "Không rõ";
   };
 
@@ -80,25 +96,31 @@ export default function TodoList() {
             onChange={(e) => setQ(e.target.value)}
             style={{ flex: 1, padding: "6px" }}
           />
-          <select value={priority} onChange={(e) => setPriority(e.target.value)}>
+          <select
+            value={priority}
+            onChange={(e) => {
+              setPriority(e.target.value);
+              setPage(1);
+            }}
+          >
             <option value="">Tất cả</option>
-            <option value="high">Cao</option>
-            <option value="medium">Trung bình</option>
-            <option value="low">Thấp</option>
+            <option value="1">Cao</option>
+            <option value="2">Trung bình</option>
+            <option value="3">Thấp</option>
           </select>
           <select
             value={sortOrder}
             onChange={(e) => setSortOrder(e.target.value)}
           >
-            <option value="desc">Tăng dần</option>
-            <option value="asc">Giảm dần</option>
+            <option value="asc">Tăng dần</option>
+            <option value="desc">Giảm dần</option>
           </select>
         </div>
 
         {loading ? (
           <p>Đang tải...</p>
-        ) : todos.length > 0 ? (
-          todos.map((todo) => (
+        ) : filteredTodos.length > 0 ? (
+          filteredTodos.map((todo) => (
             <div
               key={todo._id}
               style={{
@@ -112,15 +134,15 @@ export default function TodoList() {
               <p>
                 {todo.name}
                 <br />
-                 Ưu tiên: {getPriorityLabel(todo.priority)} | Hạn:{" "}
+                Ưu tiên: {getPriorityLabel(todo.priority)} | Hạn:{" "}
                 {new Date(todo.dueDate).toLocaleDateString()}
               </p>
               <p>
                 {todo.completed
-                  ? "✅ Hoàn thành"
+                  ? " Hoàn thành"
                   : new Date(todo.dueDate) < new Date()
-                  ? "⚠️ Quá hạn"
-                  : "⏳ Đang thực hiện"}
+                  ? " Quá hạn"
+                  : " Đang thực hiện"}
               </p>
             </div>
           ))
@@ -148,7 +170,7 @@ export default function TodoList() {
             Trang {page}/{totalPages}
           </span>
           <button
-            onClick={() => setPage((p) => p + 1)}
+            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
             style={{ padding: "5px 10px" }}
           >
             Tiếp ➡
