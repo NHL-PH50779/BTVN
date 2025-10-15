@@ -1,15 +1,24 @@
-import React from "react";
-import ToDoList from "./Components/ToDoList";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import HomeLayout from "./layouts/MainLayout";
+import TodosPage from "./pages/TodosPage";
+import ImportantPage from "./pages/ImportantPage";
+import TodoDetailPage from "./pages/TodoDetailPage";
+import NotFoundPage from "./pages/NotFoundPage";
 
-export default function App() {
+function App() {
   return (
-    <div >
-      <div>
-        <h1>
-           Danh Sách Việc Cần Làm
-        </h1>
-        <ToDoList />
-      </div>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Navigate to="/todos" />} />
+        <Route element={<HomeLayout />}>
+          <Route path="/todos" element={<TodosPage />} />
+          <Route path="/important" element={<ImportantPage />} />
+          <Route path="/todos/:id" element={<TodoDetailPage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
+
+export default App;
