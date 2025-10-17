@@ -11,7 +11,7 @@ const TodosPage = () => {
   const [q, setQ] = useState(searchParams.get("q") || "");
   const [priority, setPriority] = useState(searchParams.get("priority") || "");
   const [statusFilter, setStatusFilter] = useState(searchParams.get("statusFilter") || "");
-  const [sortOrder, setSortOrder] = useState(searchParams.get("sortOrder") || "asc");
+  const [sortOrder, setSortOrder] = useState(searchParams.get("sortOrder") || "");
   const [page, setPage] = useState(Number(searchParams.get("page")) || 1);
   const [totalPages, setTotalPages] = useState(1);
   const [total, setTotal] = useState(0);
@@ -28,48 +28,65 @@ const TodosPage = () => {
   }, [q, priority, statusFilter, sortOrder, page, setSearchParams]);
 
   useEffect(() => {
-    const fetchTodos = async () => {
+    const fetchTodos = () => {
       setLoading(true);
-      try {
-        const params = new URLSearchParams();
-        params.append("_page", page);
-        params.append("_limit", limit);
-        if (q.trim()) params.append("q", q.trim());
-        if (priority) params.append("priority", priority);
-        if (statusFilter === "Hoàn thành") {
-          params.append("completed", "true");
-        } else if (statusFilter === "Đang thực hiện") {
-          params.append("completed", "false");
-          params.append("dueDate_gte", new Date().toISOString());
-        } else if (statusFilter === "Quá hạn") {
-          params.append("completed", "false");
-          params.append("dueDate_lte", new Date().toISOString());
-        }
+      const params = new URLSearchParams();
+      params.append("_page", page);
+      params.append("_limit", limit);
+      if (q.trim()) params.append("q", q.trim());
+      if (priority) params.append("priority", priority);
+      if (statusFilter === "Hoàn thành") {
+        params.append("completed", "true");
+      } else if (statusFilter === "Đang thực hiện") {
+        params.append("completed", "false");
+        params.append("dueDate_gte", new Date().toISOString());
+      } else if (statusFilter === "Quá hạn") {
+        params.append("completed", "false");
+        params.append("dueDate_lte", new Date().toISOString());
+      }
+      if (sortOrder) {
         params.append("_sort", "priority");
         params.append("_order", sortOrder);
-
-        const res = await fetch(`${API_URL}?${params.toString()}`);
-        const json = await res.json();
-        setTodos(Array.isArray(json.data) ? json.data : []);
-        if (json.meta) {
-          setTotalPages(json.meta.totalPages || 1);
-          setTotal(json.meta.total || 0);
-        }
-      } catch (err) {
-        console.error("Lỗi khi fetch todos:", err);
-        setTodos([]);
-      } finally {
-        setLoading(false);
       }
+
+      fetch(`${API_URL}?${params.toString()}`)
+        .then((res) => res.json())
+        .then((json) => {
+          setTodos(Array.isArray(json.data) ? json.data : []);
+          if (json.meta) {
+            setTotalPages(json.meta.totalPages || 1);
+            setTotal(json.meta.total || 0);
+          }
+        })
+        .catch(() => setTodos([]))
+        .finally(() => setLoading(false));
     };
     fetchTodos();
   }, [q, priority, statusFilter, sortOrder, page]);
+
+  // const handleDelete = (id) => {
+  //   if (!window.confirm("Bạn có chắc muốn xóa công việc này?")) return;
+  //   fetch(`${API_URL}/${id}`, {
+  //     method: "DELETE",
+  //     headers: { "Content-Type": "application/json" },
+  //   })
+  //     .then((res) => res.json())
+  //     .then((json) => {
+  //       if (json.success) {
+  //         alert("Xóa công việc thành công");
+  //         setTodos(todos.filter((todo) => todo._id !== id));
+  //       } else {
+  //         alert(json.message || "Đã có lỗi xảy ra");
+  //       }
+  //     })
+  //     .catch(() => alert("Đã có lỗi xảy ra"));
+  // };
 
   const resetFilters = () => {
     setQ("");
     setPriority("");
     setStatusFilter("");
-    setSortOrder("asc");
+    setSortOrder("");
     setPage(1);
     setSearchParams({});
   };
@@ -91,7 +108,6 @@ const TodosPage = () => {
       >
         Tạo mới công việc
       </Link>
-
       <div
         style={{
           display: "flex",
@@ -122,12 +138,12 @@ const TodosPage = () => {
             setPriority(e.target.value);
             setPage(1);
           }}
-          style={{ padding: 8, borderRadius: 6 }}
+          style={{ padding: 8, borderRadius: 6, border: "1px solid #ccc" }}
         >
           <option value="">Mức ưu tiên</option>
           <option value="3">Cao</option>
           <option value="2">Trung bình</option>
-          <option value="">Thấp</option>
+          <option value="1">Thấp</option>
         </select>
         <select
           value={statusFilter}
@@ -135,7 +151,7 @@ const TodosPage = () => {
             setStatusFilter(e.target.value);
             setPage(1);
           }}
-          style={{ padding: 8, borderRadius: 6 }}
+          style={{ padding: 8, borderRadius: 6, border: "1px solid #ccc" }}
         >
           <option value="">Trạng thái</option>
           <option value="Đang thực hiện">Đang thực hiện</option>
@@ -148,12 +164,13 @@ const TodosPage = () => {
             setSortOrder(e.target.value);
             setPage(1);
           }}
-          style={{ padding: 8, borderRadius: 6 }}
+          style={{ padding: 8, borderRadius: 6, border: "1px solid #ccc" }}
         >
+          <option value="">Sắp xếp</option>
           <option value="asc">Ưu tiên tăng dần</option>
           <option value="desc">Ưu tiên giảm dần</option>
         </select>
-        {(q || priority || statusFilter || sortOrder !== "asc") && (
+        {(q || priority || statusFilter || sortOrder) && (
           <button
             onClick={resetFilters}
             style={{
@@ -169,11 +186,10 @@ const TodosPage = () => {
           </button>
         )}
       </div>
-
       {loading ? (
-        <p>Đang tải dữ liệu...</p>
+        <p style={{ textAlign: "center", color: "#6b7280" }}>Đang tải dữ liệu...</p>
       ) : todos.length === 0 ? (
-        <p>Không có công việc phù hợp.</p>
+        <p style={{ textAlign: "center", color: "#6b7280" }}>Không có công việc phù hợp.</p>
       ) : (
         <>
           <div style={{ marginBottom: 10, color: "#6b7280", fontSize: 14 }}>
@@ -197,9 +213,7 @@ const TodosPage = () => {
                   boxShadow: "0 1px 4px rgba(0,0,0,0.05)",
                 }}
               >
-                <h3 style={{ margin: "0 0 8px", color: "#111827" }}>
-                  {todo.name}
-                </h3>
+                <h3 style={{ margin: "0 0 8px", color: "#111827" }}>{todo.name}</h3>
                 <p style={{ margin: "0 0 8px", color: "#374151" }}>
                   {todo.description || <em>Không có mô tả</em>}
                 </p>
@@ -211,28 +225,40 @@ const TodosPage = () => {
                     ? new Date(todo.dueDate).toLocaleDateString("vi-VN")
                     : "Chưa đặt"}
                 </div>
-                <div style={{ marginTop: 8 }}>
+                <div style={{ marginTop: 8, display: "flex", gap: 8 }}>
                   <Link
                     to={`/todos/${todo._id}`}
                     style={{
-                      display: "inline-block",
                       background: "#2563eb",
                       color: "#fff",
-                      textDecoration: "none",
                       padding: "6px 10px",
                       borderRadius: 6,
+                      textDecoration: "none",
                       fontSize: 13,
                     }}
                   >
-                    Cập nhật
+                    Xem chi tiết
                   </Link>
+                  {/* <button
+                    onClick={() => handleDelete(todo._id)}
+                    style={{
+                      background: "#dc2626",
+                      color: "#fff",
+                      padding: "6px 10px",
+                      borderRadius: 6,
+                      border: "none",
+                      fontSize: 13,
+                      cursor: "pointer",
+                    }}
+                  >
+                    Xóa
+                  </button> */}
                 </div>
               </div>
             ))}
           </div>
         </>
       )}
-
       <div
         style={{
           display: "flex",
