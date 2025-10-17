@@ -1,9 +1,9 @@
 // src/utils/todoUtils.js
 
 export const getPriorityText = (priority) => {
-  if (priority === 1) return "Cao";
+  if (priority === 3) return "Cao";
   if (priority === 2) return "Trung bình";
-  if (priority === 3) return "Thấp";
+  if (priority === 1) return "Thấp";
   return "Không xác định";
 };
 
