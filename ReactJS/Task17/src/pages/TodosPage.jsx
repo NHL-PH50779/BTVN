@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import { getPriorityText, getStatusText } from "../name";
 
 const API_URL = "https://api-class-o1lo.onrender.com/api/v1/todos";
 
 const TodosPage = () => {
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [todos, setTodos] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -12,7 +13,7 @@ const TodosPage = () => {
   const [priority, setPriority] = useState(searchParams.get("priority") || "");
   const [statusFilter, setStatusFilter] = useState(searchParams.get("statusFilter") || "");
   const [sortOrder, setSortOrder] = useState(searchParams.get("sortOrder") || "");
-  const [page, setPage] = useState(Number(searchParams.get("page")) || 1);
+  const [page, setPage] = useState(Number(searchParams.get("page") || 1));
   const [totalPages, setTotalPages] = useState(1);
   const [total, setTotal] = useState(0);
   const limit = 5;
@@ -30,6 +31,11 @@ const TodosPage = () => {
   useEffect(() => {
     const fetchTodos = () => {
       setLoading(true);
+      const token = localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken");
+      if (!token) {
+        navigate("/login");
+        return;
+      }
       const params = new URLSearchParams();
       params.append("_page", page);
       params.append("_limit", limit);
@@ -48,8 +54,9 @@ const TodosPage = () => {
         params.append("_sort", "priority");
         params.append("_order", sortOrder);
       }
-
-      fetch(`${API_URL}?${params.toString()}`)
+      fetch(`${API_URL}?${params.toString()}`, {
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+      })
         .then((res) => res.json())
         .then((json) => {
           setTodos(Array.isArray(json.data) ? json.data : []);
@@ -62,25 +69,30 @@ const TodosPage = () => {
         .finally(() => setLoading(false));
     };
     fetchTodos();
-  }, [q, priority, statusFilter, sortOrder, page]);
+  }, [q, priority, statusFilter, sortOrder, page, navigate]);
 
-  // const handleDelete = (id) => {
-  //   if (!window.confirm("Bạn có chắc muốn xóa công việc này?")) return;
-  //   fetch(`${API_URL}/${id}`, {
-  //     method: "DELETE",
-  //     headers: { "Content-Type": "application/json" },
-  //   })
-  //     .then((res) => res.json())
-  //     .then((json) => {
-  //       if (json.success) {
-  //         alert("Xóa công việc thành công");
-  //         setTodos(todos.filter((todo) => todo._id !== id));
-  //       } else {
-  //         alert(json.message || "Đã có lỗi xảy ra");
-  //       }
-  //     })
-  //     .catch(() => alert("Đã có lỗi xảy ra"));
-  // };
+  const handleDelete = (id) => {
+    if (!window.confirm("Bạn có chắc muốn xóa công việc này?")) return;
+    const token = localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken");
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+    fetch(`${API_URL}/${id}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+    })
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.success) {
+          alert("Xóa công việc thành công");
+          setTodos(todos.filter((todo) => todo._id !== id));
+        } else {
+          alert(json.message || "Đã có lỗi xảy ra");
+        }
+      })
+      .catch(() => alert("Đã có lỗi xảy ra"));
+  };
 
   const resetFilters = () => {
     setQ("");
@@ -239,7 +251,7 @@ const TodosPage = () => {
                   >
                     Xem chi tiết
                   </Link>
-                  {/* <button
+                  <button
                     onClick={() => handleDelete(todo._id)}
                     style={{
                       background: "#dc2626",
@@ -252,7 +264,7 @@ const TodosPage = () => {
                     }}
                   >
                     Xóa
-                  </button> */}
+                  </button>
                 </div>
               </div>
             ))}
