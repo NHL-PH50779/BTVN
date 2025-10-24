@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import {z} from "zod";
+import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
@@ -28,8 +28,7 @@ const LoginPage = () => {
       const json = await res.json();
       if (json.success) {
         alert("Đăng nhập thành công");
-        const storage = data.remember ? localStorage : sessionStorage;
-        storage.setItem("accessToken", json.data.accessToken);
+        localStorage.setItem("accessToken", json.data.accessToken);
         navigate("/todos");
       } else {
         setApiError(json.message || "Đăng nhập thất bại");
@@ -61,10 +60,6 @@ const LoginPage = () => {
             style={{ width: "100%", padding: 8, borderRadius: 6, border: "1px solid #ccc" }}
           />
           {errors.password && <p style={{ color: "#dc2626", fontSize: 13, marginTop: 4 }}>{errors.password.message}</p>}
-        </div>
-        <div style={{ marginBottom: 16, display: "flex", alignItems: "center", gap: 8 }}>
-          <input type="checkbox" {...register("remember")} style={{ margin: 0 }} />
-          <label style={{ color: "#374151" }}>Ghi nhớ đăng nhập</label>
         </div>
         <button
           type="submit"

@@ -31,7 +31,7 @@ const TodosPage = () => {
   useEffect(() => {
     const fetchTodos = () => {
       setLoading(true);
-      const token = localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken");
+      const token = localStorage.getItem("accessToken");
       if (!token) {
         navigate("/login");
         return;
@@ -73,7 +73,7 @@ const TodosPage = () => {
 
   const handleDelete = (id) => {
     if (!window.confirm("Bạn có chắc muốn xóa công việc này?")) return;
-    const token = localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken");
+    const token = localStorage.getItem("accessToken");
     if (!token) {
       navigate("/login");
       return;
@@ -94,6 +94,12 @@ const TodosPage = () => {
       .catch(() => alert("Đã có lỗi xảy ra"));
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("accessToken");
+    alert("Đăng xuất thành công");
+    navigate("/login");
+  };
+
   const resetFilters = () => {
     setQ("");
     setPriority("");
@@ -105,7 +111,22 @@ const TodosPage = () => {
 
   return (
     <div style={{ maxWidth: 1000, margin: "0 auto", padding: 20 }}>
-      <h2 style={{ marginBottom: 20 }}>📋 Danh sách công việc</h2>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+        <h2 style={{ margin: 0 }}>📋 Danh sách công việc</h2>
+        <button
+          onClick={handleLogout}
+          style={{
+            background: "#dc2626",
+            color: "#fff",
+            padding: "8px 16px",
+            border: "none",
+            borderRadius: 6,
+            cursor: "pointer",
+          }}
+        >
+          Đăng xuất
+        </button>
+      </div>
       <Link
         to="/todos/create"
         style={{

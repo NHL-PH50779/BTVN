@@ -13,7 +13,7 @@ const TodoDetailPage = () => {
   useEffect(() => {
     const fetchTodo = () => {
       setLoading(true);
-      const token = localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken");
+      const token = localStorage.getItem("accessToken");
       if (!token) {
         navigate("/login");
         return;
@@ -34,7 +34,7 @@ const TodoDetailPage = () => {
 
   const handleDelete = () => {
     if (!window.confirm("Bạn có chắc muốn xóa công việc này?")) return;
-    const token = localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken");
+    const token = localStorage.getItem("accessToken");
     if (!token) {
       navigate("/login");
       return;

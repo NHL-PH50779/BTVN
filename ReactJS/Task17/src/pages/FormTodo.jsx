@@ -14,7 +14,7 @@ const FormTodo = ({ mode }) => {
 
     useEffect(() => {
         if (mode === "update") {
-            const token = localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken");
+            const token = localStorage.getItem("accessToken");
             if (!token) {
                 navigate("/login");
                 return;
@@ -65,7 +65,7 @@ const FormTodo = ({ mode }) => {
         }
         setFetchLoading(true);
         setError("");
-        const token = localStorage.getItem("accessToken") || sessionStorage.getItem("accessToken");
+        const token = localStorage.getItem("accessToken");
         if (!token) {
             navigate("/login");
             return;
