@@ -1,0 +1,66 @@
+{
+  "projects": [
+    {
+      "title": "Phát triển website thương mại điện tửs",
+      "description": "Xây dựng website bán hàng với React và Node.js.",
+      "status": "in-progress",
+      "id": 1
+    },
+    {
+      "title": "Ứng dụng quản lý kho",
+      "description": "Ứng dụng quản lý kho hàng với giao diện thân thiện.",
+      "status": "not-started",
+      "id": 2
+    },
+    {
+      "title": "Phát triển website thương mại điện tử",
+      "description": "Xây dựng website bán hàng với React và Node.js.",
+      "status": "in-progress",
+      "id": 3
+    }
+  ],
+  "tasks": [
+    {
+      "title": "Thiết kế giao diện người dùngdddd",
+      "description": "Tạo wireframe và mockup cho trang chủ và trang sản phẩm.",
+      "status": "completed",
+      "projectId": 1,
+      "id": 1
+    },
+    {
+      "id": 2,
+      "projectId": 1,
+      "title": "Phát triển API backend",
+      "description": "Xây dựng các endpoint RESTful cho quản lý sản phẩm và đơn hàng.",
+      "status": "in-progress"
+    },
+    {
+      "id": 3,
+      "projectId": 2,
+      "title": "Tối ưu hóa cơ sở dữ liệu",
+      "description": "Cải thiện hiệu suất truy vấn và thiết kế schema.",
+      "status": "not-started"
+    },
+    {
+      "title": "fdsfsdfdsfd",
+      "description": "dsfdsdsfd",
+      "status": "not-started",
+      "projectId": 1,
+      "id": 4
+    }
+  ],
+  "users": [
+    
+    {
+      "email": "111@gmail.com",
+      "password": "$2a$10$OFLhotNhvAmwsm/se5F8oeXCudK.q7gxnT2HHHYbovbA1R6Dmow9G",
+      "id": 2
+    },
+    {
+      "email": "abcd@gmail.com",
+      "password": "$2a$10$Hd9.2ocifdVEFY2hvCOyGuMBb9.RTkjrAxLzY3wK/Q3EDBc8AkBdu",
+      "role": "admin",
+      "id": 3
+    }
+  ]
+}

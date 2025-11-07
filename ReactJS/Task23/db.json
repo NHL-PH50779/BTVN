@@ -1,0 +1,93 @@
+{
+  "products": [
+    {
+      "title": "Product Assss",
+      "price": 220,
+      "categoryId": "1",
+      "description": "This is product A",
+      "thumbnail": "https://picsum.photos/200/300.webp",
+      "stock": 100,
+      "id": 1
+    },
+    {
+      "id": 2,
+      "title": "Product B",
+      "price": 180,
+      "description": "This is product B",
+      "thumbnail": "https://picsum.photos/200/300.webp",
+      "stock": 100,
+      "categoryId": 1
+    },
+    {
+      "id": 3,
+      "title": "Product C",
+      "price": 120,
+      "description": "This is product C",
+      "thumbnail": "https://picsum.photos/200/300.webp",
+      "stock": 100,
+      "categoryId": 2
+    },
+    {
+      "id": 4,
+      "title": "Product D",
+      "price": 150,
+      "description": "This is product D",
+      "thumbnail": "https://picsum.photos/200/300.webp",
+      "stock": 100,
+      "categoryId": 2
+    },
+    {
+      "id": 5,
+      "title": "Product E",
+      "price": 200,
+      "description": "This is product E",
+      "thumbnail": "https://picsum.photos/200/300.webp",
+      "stock": 100,
+      "categoryId": 3
+    },
+    {
+      "id": 6,
+      "title": "Product F",
+      "price": 250,
+      "description": "This is product F",
+      "thumbnail": "https://picsum.photos/200/300.webp",
+      "stock": 100,
+      "categoryId": 3
+    },
+    {
+      "title": "www",
+      "price": 22,
+      "categoryId": "1",
+      "description": "",
+      "thumbnail": "",
+      "stock": 0,
+      "id": 73
+    }
+  ],
+  "categories": [
+    {
+      "title": "Technologyg",
+      "slug": "technology",
+      "id": 1
+    },
+    {
+      "id": 2,
+      "title": "Clothing",
+      "slug": "clothing"
+    },
+    {
+      "id": 3,
+      "title": "Others",
+      "slug": "others"
+    }
+  ],
+  "users": [
+    {
+      "email": "abcd@gmail.com",
+      "password": "$2a$10$9oY6JWbXFlSi6tQ.tpKm7OURr0SrFQ2bu4oeSyfb7ANL1Wt9HGq3a",
+      "fullname": "dcs",
+      "role": "admin",
+      "id": 1
+    }
+  ]
+}

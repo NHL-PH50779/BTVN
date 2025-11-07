@@ -1,0 +1,90 @@
+{
+  "courses": [
+    {
+      "id": 1,
+      "title": "Lập trình web với React",
+      "description": "Khóa học React cơ bản cho ngời mới bắt đầu.",
+      "price": 2000000
+    },
+    {
+      "id": 2,
+      "title": "Lập trình Python",
+      "description": "Khóa học Python từ cơ bản đến nâng cao.",
+      "price": 2500000
+    },
+    {
+      "title": "ưâyyayayaa",
+      "price": 16000000000000000000,
+      "description": "",
+      "id": 4
+    },
+    {
+      "title": "àdghbndfbng",
+      "price": 1111111111111,
+      "description": "",
+      "id": 5
+    }
+  ],
+  "lessons": [
+    {
+      "id": 1,
+      "courseId": 1,
+      "title": "Giới thiệu về React",
+      "content": "Làm quen với React và cách cấu hình môi trường phát triển."
+    },
+    {
+      "id": 2,
+      "courseId": 1,
+      "title": "Cấu trúc và Component trong React",
+      "content": "Cách sử dụng và tổ chức các components trong React."
+    },
+    {
+      "title": "hhhhhhhhh",
+      "content": "4444",
+      "id": "3"
+    },
+    {
+      "title": "sssssssssss",
+      "content": "â",
+      "courseId": "2",
+      "id": "yQKMxz5"
+    },
+    {
+      "title": "sss123",
+      "content": "aa",
+      "courseId": "2",
+      "id": "lUublYI"
+    }
+  ],
+  "users": [
+    {
+      "email": "abcd@gmail.com",
+      "password": "$2a$10$o.abDX3pE9KkQ.Sa6x1Qy.Xph7m/ojRZL//prvyPGp0TwgD8s7JR2",
+      "fullname": "huulll",
+      "confirmPassword": "123456",
+      "id": 1
+    },
+    {
+      "email": "abcde@gmail.com",
+      "password": "$2a$10$UJhygzlaN3uzCaWPTE9TF.Zhhrd5olnh93J5YlzGMUILN0PJ20qea",
+      "fullname": "abgcx",
+      "confirmPassword": "123456",
+      "id": 2
+    },
+    {
+      "email": "111@gmail.com",
+      "password": "$2a$10$67zAg2Bqalqavjc.dy20PuYADmAYBUOCMcB7bQ5uk.xUQ3pDcOTPK",
+      "fullname": "Nguyễn Hữu Lâm",
+      "confirmPassword": "123456",
+      "id": 3
+    },
+    {
+      "email": "lamnhph50779@gmail.com",
+      "password": "$2a$10$8HwaIjylPngwZXXyd..NtO6ejdeXD/5mbKtaptzIIKLG/rGVQX/AC",
+      "fullname": "Nguyễn Hữu Lâm",
+      "confirmPassword": "123456",
+      "role": "admin",
+      "id": 4
+    }
+  ]
+}
