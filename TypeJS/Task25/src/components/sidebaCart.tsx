@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { CartContext } from '../context/CartContext';
+import { CartContext } from '../Context/CartContext';
 
 type Props = {
     openCart: boolean;
@@ -17,7 +17,7 @@ const SidebarCart = ({ openCart, setOpenCart }: Props) => {
         return null;
     }
 
-    const { cart, total, handleAddToCart, removeToCart } = cartContext;
+    const { cart, total, AddToCart, removeToCart } = cartContext;
     
     // --- STYLE DEFINITIONS ---
     
@@ -172,7 +172,7 @@ const SidebarCart = ({ openCart, setOpenCart }: Props) => {
                                         {/* Tăng số lượng */}
                                         <button
                                             style={qtyButtonStyle}
-                                            onClick={() => handleAddToCart(item)}
+                                            onClick={() => AddToCart(item)}
                                             onMouseEnter={e => e.currentTarget.style.backgroundColor = '#f0f0f0'}
                                             onMouseLeave={e => e.currentTarget.style.backgroundColor = 'white'}
                                         >

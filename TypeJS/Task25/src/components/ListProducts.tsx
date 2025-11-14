@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { getProducts } from '../api/apiProduct';
-import { CartContext } from '../context/CartContext';
+import { CartContext } from '../Context/CartContext';
 
 export type TProducts = {
     id: string | number;

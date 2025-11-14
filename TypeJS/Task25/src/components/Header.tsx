@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
-import { CartContext } from '../context/CartContext';
-import SidebarCart from './SidebarCart';
+import { CartContext } from '../Context/CartContext';
+import SidebarCart from './sidebaCart';
 
 const Header = () => {
     const cartItem = useContext(CartContext);

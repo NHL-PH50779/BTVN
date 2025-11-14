@@ -3,20 +3,20 @@ import type { TCart, TProducts } from '../components/ListProducts';
 
 type CartContextType = {
     cart: TCart[];
-    handleAddToCart: (item: TProducts | TCart) => void;
+    AddToCart: (item: TProducts | TCart) => void;
     total: number;
     removeToCart: (item: TProducts ) => void;
 };
 export const CartContext = createContext<CartContextType>({
     cart: [],
-    handleAddToCart: () => {},
+    AddToCart: () => {},
     total: 0,
     removeToCart: () => {},
 });
 export const CartContextProvider = ({ children }: {children: ReactNode}) => {
     const [cart, setCart] = useState<TCart[]>([]);
 
-    const handleAddToCart = (item: TCart | TProducts) => {
+    const AddToCart = (item: TCart | TProducts) => {
         console.log(item)
         const newCart = cart.find((c) => c.id === item.id);
         
@@ -65,7 +65,7 @@ export const CartContextProvider = ({ children }: {children: ReactNode}) => {
 
     const value = {
         cart,
-        handleAddToCart,
+        AddToCart,
         total,
         removeToCart,
     };
