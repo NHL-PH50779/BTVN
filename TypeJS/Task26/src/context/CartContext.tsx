@@ -1,19 +1,17 @@
 import React, { createContext, useContext, useReducer, useEffect, type ReactNode } from "react";
 import type { CartItem, Product } from "../Ts/products";
+import axios from "axios";
 
-// 1. Định nghĩa action type
 type Action =
     | { type: "ADD"; payload: Product }
     | { type: "DECREASE"; payload: Product }
     | { type: "REMOVE"; payload: number }
-    | { type: "SET_CART"; payload: CartItem[] }; // dùng khi load từ localStorage
+    | { type: "SET_CART"; payload: CartItem[] };
 
-// 2. Định nghĩa state type
 interface CartState {
     cart: CartItem[];
 }
 
-// 3. Reducer
 const cartReducer = (state: CartState, action: Action): CartState => {
     switch (action.type) {
         case "ADD": {
@@ -23,7 +21,7 @@ const cartReducer = (state: CartState, action: Action): CartState => {
                 return {
                     cart: state.cart.map((item) =>
                         item.id === product.id
-                            ? { ...item, quantity: Math.min(item.quantity + 1, 99) } // max 99
+                            ? { ...item, quantity: Math.min(item.quantity + 1, 99) }
                             : item
                     ),
                 };
@@ -46,7 +44,6 @@ const cartReducer = (state: CartState, action: Action): CartState => {
                     ),
                 };
             } else {
-                // remove if quantity = 1
                 return {
                     cart: state.cart.filter((item) => item.id !== product.id),
                 };
@@ -68,7 +65,6 @@ const cartReducer = (state: CartState, action: Action): CartState => {
     }
 };
 
-// 4. Định nghĩa context type
 interface CartContextType {
     cart: CartItem[];
     addToCart: (product: Product) => void;
@@ -76,21 +72,19 @@ interface CartContextType {
     removeCart: (id: number) => void;
 }
 
-// 5. Tạo context
 export const CartContext = createContext<CartContextType | undefined>(undefined);
 
-// 6. Hook tiện lợi
 export const useCart = () => {
     const context = useContext(CartContext);
     if (!context) throw new Error("CartContext must be used within a CartContextProvider");
     return context;
 };
 
-// 7. Provider
 export const CartContextProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+
     const [state, dispatch] = useReducer(cartReducer, { cart: [] });
 
-    // Load cart từ localStorage khi mount
+
     useEffect(() => {
         const storedCart = localStorage.getItem("cart");
         if (storedCart) {
@@ -98,12 +92,10 @@ export const CartContextProvider: React.FC<{ children: ReactNode }> = ({ childre
         }
     }, []);
 
-    // Lưu cart vào localStorage mỗi khi state.cart thay đổi
     useEffect(() => {
         localStorage.setItem("cart", JSON.stringify(state.cart));
     }, [state.cart]);
 
-    // Các hàm gửi action
     const addToCart = (product: Product) => dispatch({ type: "ADD", payload: product });
     const giamQuantity = (product: Product) => dispatch({ type: "DECREASE", payload: product });
     const removeCart = (id: number) => dispatch({ type: "REMOVE", payload: id });
