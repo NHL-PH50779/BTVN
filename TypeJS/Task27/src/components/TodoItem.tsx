@@ -1,164 +1,195 @@
-import { Todo, toggleTodo, deleteTodo } from "../features/todos/todosSlice";
+import { useState } from "react";
 import { useAppDispatch } from "../hooks";
+import { addTodo } from "../features/todos/todosSlice";
 
-interface TodoItemProps {
-  todo: Todo;
-}
-
-export default function TodoItem({ todo }: TodoItemProps) {
+export default function AddTodo() {
   const dispatch = useAppDispatch();
 
-  // Xác định trạng thái hoàn thành (hỗ trợ nhiều tên trường)
-  const completed = todo.completed ?? todo.isCompleted ?? false;
+  const [form, setForm] = useState({
+    title: "",
+    description: "",
+    priority: 1, // 1: Thấp, 2: Trung bình, 3: Cao
+    dueDate: "",
+  });
 
-  // Tiêu đề linh hoạt
-  const title =
-    typeof todo.title === "string"
-      ? todo.title
-      : typeof todo.name === "string"
-      ? todo.name
-      : "Không có tiêu đề";
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    const newValue = name === "priority" ? Number(value) : value;
 
-  const description = typeof todo.description === "string" ? todo.description : "";
-  const priority = (todo.priority as string) ?? "N/A";
-
-  // Format ngày chuẩn Việt Nam
-  const formatDate = (date?: string | Date): string => {
-    if (!date) return "";
-    const d = new Date(date);
-    return isNaN(d.getTime()) ? "" : d.toLocaleDateString("vi-VN");
+    setForm((prev) => ({
+      ...prev,
+      [name]: newValue,
+    }));
   };
 
-  const dueDate = formatDate(todo.dueDate);
-  const createdAt = formatDate(todo.createdAt);
-  const updatedAt = formatDate(todo.updatedAt);
+  const handleAdd = () => {
+    if (!form.title.trim()) return;
 
-  // Màu priority
-  const getPriorityColor = (p: string): string => {
-    switch (p) {
-      case "High": return "#ef4444";
-      case "Medium": return "#f59e0b";
-      case "Low": return "#10b981";
-      default: return "#6b7280";
+    dispatch(
+      addTodo({
+        title: form.title.trim(),
+        description: form.description.trim(),
+        priority: form.priority === 3 ? "High" : form.priority === 2 ? "Medium" : "Low",
+        dueDate: form.dueDate || undefined,
+      })
+    );
+
+    // Reset form
+    setForm({
+      title: "",
+      description: "",
+      priority: 1,
+      dueDate: "",
+    });
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && !e.shiftKey && e.currentTarget.tagName !== "TEXTAREA") {
+      e.preventDefault();
+      handleAdd();
     }
   };
-
-  const priorityColor = getPriorityColor(priority);
 
   return (
     <div
       style={{
+        backgroundColor: "#ffffff",
         border: "1px solid #e5e7eb",
-        borderRadius: "12px",
-        padding: "16px",
-        marginBottom: "12px",
-        backgroundColor: completed ? "#f9fafb" : "#ffffff",
-        boxShadow: "0 2px 6px rgba(0,0,0,0.05)",
-        transition: "all 0.3s ease",
-        opacity: completed ? 0.65 : 1,
-        position: "relative" as const,
-        cursor: "default",
+        borderRadius: "16px",
+        padding: "24px",
+        boxShadow: "0 4px 16px rgba(0,0,0,0.06)",
+        maxWidth: "480px",
+        margin: "0 auto 32px",
       }}
     >
-      {/* Nút xóa */}
-      <button
-        onClick={(e) => {
-          e.stopPropagation();
-          dispatch(deleteTodo(todo._id));
-        }}
+      <h2
         style={{
-          position: "absolute",
-          top: "12px",
-          right: "12px",
-          width: "36px",
-          height: "36px",
-          borderRadius: "50%",
-          backgroundColor: "#fee2e2",
-          color: "#dc2626",
-          border: "none",
-          fontSize: "20px",
-          fontWeight: "bold",
-          cursor: "pointer",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          transition: "all 0.2s ease",
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.backgroundColor = "#fecaca";
-          e.currentTarget.style.transform = "scale(1.1)";
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.backgroundColor = "#fee2e2";
-          e.currentTarget.style.transform = "scale(1)";
+          margin: "0 0 20px 0",
+          fontSize: "22px",
+          fontWeight: "700",
+          color: "#1f2937",
+          textAlign: "center" as const,
         }}
       >
-        ×
-      </button>
+        Thêm công việc mới
+      </h2>
 
-      {/* Tiêu đề + priority - click để toggle */}
-      <div
-        onClick={() => dispatch(toggleTodo(todo))}
-        style={{
-          cursor: "pointer",
-          marginBottom: "8px",
-          display: "flex",
-          alignItems: "center",
-          gap: "10px",
-          flexWrap: "wrap" as const,
-        }}
-      >
-        <span
+      <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+        {/* Title */}
+        <input
+          type="text"
+          name="title"
+          value={form.title}
+          onChange={handleChange}
+          onKeyPress={handleKeyPress}
+          placeholder="Tên công việc (bắt buộc)..."
           style={{
-            fontSize: "18px",
-            fontWeight: 600,
-            color: completed ? "#6b7280" : "#111827",
-            textDecoration: completed ? "line-through" : "none",
+            padding: "12px 16px",
+            fontSize: "16px",
+            border: "2px solid #e5e7eb",
+            borderRadius: "12px",
+            outline: "none",
+            transition: "all 0.2s ease",
           }}
-        >
-          {title}
-        </span>
+          onFocus={(e) => (e.currentTarget.style.borderColor = "#3b82f6")}
+          onBlur={(e) => (e.currentTarget.style.borderColor = "#e5e7eb")}
+        />
 
-        <span
+        {/* Description */}
+        <textarea
+          name="description"
+          value={form.description}
+          onChange={handleChange}
+          placeholder="Mô tả chi tiết (tùy chọn)..."
+          rows={3}
           style={{
-            backgroundColor: priorityColor + "20",
-            color: priorityColor,
-            fontSize: "11px",
-            fontWeight: "bold",
-            padding: "4px 10px",
-            borderRadius: "999px",
-            border: `1px solid ${priorityColor}`,
-            textTransform: "uppercase" as const,
-            letterSpacing: "0.5px",
+            padding: "12px 16px",
+            fontSize: "15px",
+            border: "2px solid #e5e7eb",
+            borderRadius: "12px",
+            outline: "none",
+            resize: "vertical" as const,
+            fontFamily: "inherit",
+            transition: "all 0.2s ease",
           }}
-        >
-          {priority}
-        </span>
-      </div>
+          onFocus={(e) => (e.currentTarget.style.borderColor = "#3b82f6")}
+          onBlur={(e) => (e.currentTarget.style.borderColor = "#e5e7eb")}
+        />
 
-      {/* Mô tả */}
-      {description && (
-        <p
+        <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" as const }}>
+          {/* Priority */}
+          <select
+            name="priority"
+            value={form.priority}
+            onChange={handleChange}
+            style={{
+              padding: "12px 16px",
+              fontSize: "15px",
+              border: "2px solid #e5e7eb",
+              borderRadius: "12px",
+              backgroundColor: "white",
+              cursor: "pointer",
+              outline: "none",
+              flex: "1",
+              minWidth: "140px",
+              transition: "all 0.2s ease",
+            }}
+            onFocus={(e) => (e.currentTarget.style.borderColor = "#3b82f6")}
+            onBlur={(e) => (e.currentTarget.style.borderColor = "#e5e7eb")}
+          >
+            <option value={1}>1 - Thấp</option>
+            <option value={2}>2 - Trung bình</option>
+            <option value={3}>3 - Cao</option>
+          </select>
+
+          {/* Due Date */}
+          <input
+            type="date"
+            name="dueDate"
+            value={form.dueDate}
+            onChange={handleChange}
+            style={{
+              padding: "12px 16px",
+              fontSize: "15px",
+              border: "2px solid #e5e7eb",
+              borderRadius: "12px",
+              outline: "none",
+              cursor: "pointer",
+              flex: "1",
+              minWidth: "160px",
+              transition: "all 0.2s ease",
+            }}
+            onFocus={(e) => (e.currentTarget.style.borderColor = "#3b82f6")}
+            onBlur={(e) => (e.currentTarget.style.borderColor = "#e5e7eb")}
+          />
+        </div>
+        {/* Submit Button */}
+        <button
+          onClick={handleAdd}
+          disabled={!form.title.trim()}
           style={{
-            margin: "8px 0 12px 0",
-            color: "#4b5563",
-            fontSize: "14px",
-            lineHeight: 1.5,
+            padding: "14px 20px",
+            fontSize: "16px",
+            fontWeight: "600",
+            color: "white",
+            backgroundColor: form.title.trim() ? "#3b82f6" : "#9ca3af",
+            border: "none",
+            borderRadius: "12px",
+            cursor: form.title.trim() ? "pointer" : "not-allowed",
+            transition: "all 0.3s ease",
+            marginTop: "8px",
           }}
+          onMouseEnter={(e) =>
+            form.title.trim() && (e.currentTarget.style.backgroundColor = "#2563eb")
+          }
+          onMouseLeave={(e) =>
+            form.title.trim() && (e.currentTarget.style.backgroundColor = "#3b82f6")
+          }
         >
-          {description}
-        </p>
-      )}
-
-      {/* Ngày tháng */}
-      <div style={{ fontSize: "12px", color: "#9ca3af" }}>
-        {dueDate && (
-          <div style={{ color: "#dc2626", fontWeight: 500, marginBottom: "2px" }}>
-            Due: {dueDate}
-          </div>
-        )}
-        {createdAt && <div>Created: {createdAt}</div>}
-        {updatedAt && <div>Updated: {updatedAt}</div>}
+          Thêm công việc
+        </button>
       </div>
     </div>
   );
